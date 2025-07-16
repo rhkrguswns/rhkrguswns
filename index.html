@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>시험 계획표</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      margin: 0;
+      padding: 30px;
+      color: #2c3e50;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      text-align: center;
+      letter-spacing: -0.05em;
+      user-select: none;
+    }
+    h2 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      text-align: center;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 8px;
+      user-select: none;
+    }
+
+    /* Container */
+    .subject-list {
+      background: #fff;
+      max-width: 700px;
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+      margin-bottom: 50px;
+    }
+
+    /* Subject items */
+    .subject-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #e1e8f0;
+      transition: background-color 0.3s ease;
+      cursor: default;
+    }
+    .subject-item:last-child {
+      border-bottom: none;
+    }
+    .subject-item:hover {
+      background-color: #f0f4fb;
+    }
+
+    .subject-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.1rem;
+      color: #34495e;
+      user-select: none;
+    }
+    .subject-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #3498db;
+    }
+    .subject-label i {
+      font-style: normal;
+      font-size: 22px;
+    }
+
+    /* Date input */
+    input[type="date"] {
+      padding: 8px 12px;
+      font-size: 1rem;
+      border: 1.8px solid #d0d7e4;
+      border-radius: 8px;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease;
+      cursor: pointer;
+      width: 150px;
+      text-align: center;
+    }
+    input[type="date"]:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 8px #a9c9ff;
+    }
+
+    /* Button */
+    button {
+      display: block;
+      margin: 35px auto 0 auto;
+      padding: 14px 40px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #4a90e2, #357ABD);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(53, 122, 189, 0.4);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      letter-spacing: 0.05em;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #357ABD, #2a5eaa);
+      box-shadow: 0 8px 25px rgba(41, 68, 117, 0.7);
+    }
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 10px rgba(41, 68, 117, 0.5);
+    }
+
+    /* Sections with tables */
+    .section {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      padding: 35px 45px;
+      margin-bottom: 60px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+      user-select: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 18px;
+      font-size: 1rem;
+      color: #3c4858;
+    }
+    thead th {
+      background-color: #3498db;
+      color: #fff;
+      font-weight: 700;
+      padding: 14px 18px;
+      text-align: center;
+      border-radius: 12px 12px 0 0;
+      user-select: none;
+    }
+    tbody td {
+      background-color: #f7f9fc;
+      padding: 14px 18px;
+      border-bottom: 1.5px solid #e5e9f0;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+    tbody tr:hover td {
+      background-color: #eaf2fb;
+      transition: background-color 0.25s ease;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+      }
+      .subject-list, .section {
+        padding: 25px 20px;
+      }
+      input[type="date"] {
+        width: 130px;
+        font-size: 0.95rem;
+      }
+      button {
+        width: 100%;
+        padding: 14px 0;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>📘 나만의 시험 계획표 만들기</h1>
+
+  <div class="subject-list">
+    <div class="subject-item">
+      <label class="subject-label">
+        <input type="checkbox" id="math"> 🧮 수학
+      </label>
+      <input type="date" id="mathDate" />
+    </div>
+    <div class="subject-item">
+      <label class="subject-label">
+        <input type="checkbox" id="english"> 📘 영어
+      </label>
+      <input type="date" id="englishDate" />
+    </div>
+    <div class="subject-item">
+      <label class="subject-label">
+        <input type="checkbox" id="science"> 🔬 과학
+      </label>
+      <input type="date" id="scienceDate" />
+    </div>
+    <div class="subject-item">
+      <label class="subject-label">
+        <input type="checkbox" id="history"> 🏛️ 역사
+      </label>
+      <input type="date" id="historyDate" />
+    </div>
+    <div class="subject-item">
+      <label class="subject-label">
+        <input type="checkbox" id="korean"> 📝 국어
+      </label>
+      <input type="date" id="koreanDate" />
+    </div>
+    <div class="subject-item">
+      <label class="subject-label">
+        <input type="checkbox" id="social"> 🌍 사회
+      </label>
+      <input type="date" id="socialDate" />
+    </div>
+    <button id="generate">📅 계획표 보기</button>
+  </div>
+
+  <div class="section" id="summary" style="display:none;">
+    <h2>📝 과목별 시험 일정</h2>
+    <table>
+      <thead><tr><th>과목</th><th>시험 날짜</th><th>남은 일수</th></tr></thead>
+      <tbody id="subjectSummaryBody"></tbody>
+    </table>
+  </div>
+
+  <div class="section" id="studyPlan" style="display:none;">
+    <h2>📖 과목별 공부 내용</h2>
+    <table>
+      <thead><tr><th>과목</th><th>추천 공부 내용</th></tr></thead>
+      <tbody id="studyPlanBody"></tbody>
+    </table>
+  </div>
+
+  <div class="section" id="schedule" style="display:none;">
+    <h2>📆 일주일 공부 시간표</h2>
+    <table>
+      <thead><tr><th>요일</th><th>공부 내용</th></tr></thead>
+      <tbody id="scheduleBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const subjects = {
+      math: { name: "수학", icon: "🧮", study: "기본 개념 복습, 문제풀이, 오답노트 작성" },
+      english: { name: "영어", icon: "📘", study: "단어 암기, 문법 연습, 듣기 연습" },
+      science: { name: "과학", icon: "🔬", study: "실험 내용 정리, 공식 암기, 문제풀이" },
+      history: { name: "역사", icon: "🏛️", study: "연도 암기, 주요 사건 복습, 기출문제 풀기" },
+      korean: { name: "국어", icon: "📝", study: "독해 연습, 문법 복습, 글쓰기 연습" },
+      social: { name: "사회", icon: "🌍", study: "사회 현상 이해, 핵심 개념 암기, 사례 분석" }
+    };
+    const daysKor = ['월', '화', '수', '목', '금', '토', '일'];
+
+    document.getElementById("generate").addEventListener("click", () => {
+      const today = new Date();
+      const selected = [];
+
+      for (let id in subjects) {
+        const checkbox = document.getElementById(id);
+        const dateInput = document.getElementById(id + "Date");
+        if (checkbox.checked) {
+          const dateStr = dateInput.value;
+          if (!dateStr) {
+            alert(`${subjects[id].name} 시험 날짜를 입력해주세요.`);
+            return;
+          }
+          const examDate = new Date(dateStr);
+          const daysLeft = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
+          if (daysLeft <= 0) {
+            alert(`${subjects[id].name} 시험 날짜는 오늘 이후여야 합니다.`);
+            return;
+          }
+          selected.push({ id, name: subjects[id].name, icon: subjects[id].icon, dateStr, daysLeft, priority: 1 / daysLeft });
+        }
+      }
+
+      if (selected.length === 0) {
+        alert("과목을 하나 이상 선택해주세요.");
+        return;
+      }
+
+      // 요약 표 출력
+      const summaryBody = document.getElementById("subjectSummaryBody");
+      summaryBody.innerHTML = "";
+      selected.forEach(sub => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${sub.icon} ${sub.name}</td><td>${sub.dateStr}</td><td>${sub.daysLeft}일</td>`;
+        summaryBody.appendChild(row);
+      });
+      document.getElementById("summary").style.display = "block";
+
+      // 과목별 공부 내용 표 출력
+      const studyPlanBody = document.getElementById("studyPlanBody");
+      studyPlanBody.innerHTML = "";
+      selected.forEach(sub => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${sub.icon} ${sub.name}</td><td>${subjects[sub.id].study}</td>`;
+        studyPlanBody.appendChild(row);
+      });
+      document.getElementById("studyPlan").style.display = "block";
+
+      // 시간 분배
+      const totalTime = 7 * 3;
+      const totalWeight = selected.reduce((sum, s) => sum + s.priority, 0);
+      selected.forEach(s => {
+        const raw = Math.round((s.priority / totalWeight) * totalTime);
+        s.totalHours = Math.max(1, raw);
+      });
+
+      const weekPlan = Array(7).fill(0).map(() => []);
+      const dayTime = Array(7).fill(0);
+      const remaining = selected.map(s => ({ ...s }));
+
+      let pointer = 0;
+      while (remaining.some(r => r.totalHours > 0)) {
+        for (let d = 0; d < 7; d++) {
+          if (dayTime[d] >= 3) continue;
+          for (let i = 0; i < remaining.length; i++) {
+            const sub = remaining[(pointer + i) % remaining.length];
+            if (sub.totalHours <= 0) continue;
+            if (weekPlan[d].some(e => e.id === sub.id)) continue;
+
+            const assign = Math.min(2, sub.totalHours, 3 - dayTime[d]);
+            if (assign <= 0) continue;
+
+            weekPlan[d].push({ name: sub.name, icon: sub.icon, hours: assign, id: sub.id });
+            dayTime[d] += assign;
+            sub.totalHours -= assign;
+            break;
+          }
+        }
+        pointer++;
+      }
+
+      // 결과 표
+      const scheduleBody = document.getElementById("scheduleBody");
+      scheduleBody.innerHTML = "";
+      weekPlan.forEach((list, i) => {
+        const row = document.createElement("tr");
+        const content = list.length
+          ? list.map(s => `${s.icon} ${s.name} (${s.hours}시간)`).join('<br>')
+          : "휴식";
+        row.innerHTML = `<td>${daysKor[i]}</td><td>${content}</td>`;
+        scheduleBody.appendChild(row);
+      });
+
+      document.getElementById("schedule").style.display = "block";
+    });
+  </script>
+
+</body>
+</html>
